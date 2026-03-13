@@ -16,13 +16,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	if err := cfg.SetUser("Daniel"); err != nil {
-		log.Fatal(err)
-	}
-
-	cfg, err = config.Read()
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println(cfg)
+	programState := &state {
+		cfg: &cfg,
+	}	
 }
