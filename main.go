@@ -1,9 +1,10 @@
 package main
 
 import (
-	"log"
 	"fmt"
+	"log"
 	"github.com/alphatee/gator/internal/config"
+	"os"
 )
 
 type state struct {
@@ -16,7 +17,33 @@ func main() {
 		log.Fatal(err)
 	}
 
-	programState := &state {
+	programState := &state{
 		cfg: &cfg,
+	}
+
+	cmds := commands{
+                registeredCommands: make(map[string]func(*state, command) error),
+	}
+
+	cmds.register("login", handlerLogin)
+
+	args := os.Args
+
+	if len(args) < 2 {
+		fmt.Println("Not enough arguments")
+		os.Exit(1)
+	}
+
+	cmdName := args[1]
+	cmdArgs := args[2:]
+
+	cmd := command{
+		name: cmdName,
+		args: cmdArgs,
+	}
+
+	err = cmds.run(programState, cmd)
+	if err != nil {
+		log.Fatal(err)
 	}	
 }
